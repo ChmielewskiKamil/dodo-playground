@@ -1,3 +1,6 @@
 [submodule "lib/forge-std"]
 	path = lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "lib/2023-05-dodo"]
+	path = lib/2023-05-dodo
+	url = https://github.com/sherlock-audit/2023-05-dodo
