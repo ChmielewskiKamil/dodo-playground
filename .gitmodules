@@ -4,3 +4,6 @@
 [submodule "lib/2023-05-dodo"]
 	path = lib/2023-05-dodo
 	url = https://github.com/sherlock-audit/2023-05-dodo
+[submodule "lib/openzeppelin-contracts"]
+	path = lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
