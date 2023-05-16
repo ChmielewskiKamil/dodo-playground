@@ -2,22 +2,22 @@
 
 pragma solidity 0.8.15;
 
-import "./MockERC20.sol";
-import "./DODOApproveProxy.sol";
+import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+import {IDODOApproveProxy} from "dodo/mock/DODOApproveProxy.sol";
 
 contract MockRouter {
-    DODOApproveProxy public dodoApproveProxy;
+    IDODOApproveProxy public dodoApproveProxy;
 
-    constructor(DODOApproveProxy _dodoApproveProxy) {
+    constructor(IDODOApproveProxy _dodoApproveProxy) {
         dodoApproveProxy = _dodoApproveProxy;
     }
 
     function swap(address fromToken, address toToken, uint256 fromAmount) public {
-        uint256 fromTokenBalance = MockERC20(fromToken).balanceOf(address(this));
-        uint256 toTokenBalance = MockERC20(toToken).balanceOf(address(this));
+        uint256 fromTokenBalance = IERC20(fromToken).balanceOf(address(this));
+        uint256 toTokenBalance = IERC20(toToken).balanceOf(address(this));
         uint256 toAmount = toTokenBalance - (toTokenBalance * fromTokenBalance) / (fromTokenBalance + fromAmount);
         dodoApproveProxy.claimTokens(fromToken, msg.sender, address(this), fromAmount);
-        MockERC20(toToken).transfer(msg.sender, toAmount);
+        IERC20(toToken).transfer(msg.sender, toAmount);
     }
 
     function swapError() public {
@@ -81,8 +81,8 @@ contract MockRouter {
         address toToken,
         uint256 fromAmount
     ) public view returns (uint256 toAmount) {
-        uint256 fromTokenBalance = MockERC20(fromToken).balanceOf(address(this));
-        uint256 toTokenBalance = MockERC20(toToken).balanceOf(address(this));
+        uint256 fromTokenBalance = IERC20(fromToken).balanceOf(address(this));
+        uint256 toTokenBalance = IERC20(toToken).balanceOf(address(this));
         toAmount = toTokenBalance - (toTokenBalance * fromTokenBalance) / (fromTokenBalance + fromAmount);
     }
 }
