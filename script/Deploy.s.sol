@@ -2,10 +2,10 @@
 pragma solidity ^0.8.15;
 
 // Foundry stuff
-import {Script, stdJson} from "forge-std/Script.sol";
+import {Script, stdJson, console} from "forge-std/Script.sol";
 // Mainnet state stuff
 import {DeploymentParameters, Environment} from "./Environment.sol";
-// Local deployments, mocks etc. 
+// Local deployments, mocks etc.
 import {MarginTrading} from "dodo/marginTrading/MarginTrading.sol";
 import {MarginTradingFactory} from "dodo/marginTrading/MarginTradingFactory.sol";
 import {MockRouter} from "src/MockRouter.sol";
@@ -23,12 +23,20 @@ contract Deploy is Script {
         // Environment is reponsible for pulling the mainnet state to anvil
         env = new Environment(params);
         vm.label(address(env), "Environment");
+        vm.label(msg.sender, "Deployer");
 
         marginTrading = new MarginTrading();
         marginTradingFactory =
-        new MarginTradingFactory(params.lendingPoolV2, params.weth, params.dodoApproveProxy, address(marginTrading));
+            new MarginTradingFactory(params.lendingPoolV2, params.weth, params.dodoApproveProxy, address(marginTrading));
+        router = new MockRouter(env.dodoApproveProxy());
 
         vm.stopBroadcast();
+
+        console.log("========================================================");
+        console.log("Deployer: ", msg.sender);
+        console.log("Margin Trading Template: ", address(marginTrading));
+        console.log("Margin Trading Factory: ", address(marginTradingFactory));
+        console.log("Mock Router: ", address(router));
 
         return env;
     }
@@ -46,4 +54,3 @@ contract Deploy is Script {
         (,, params) = abi.decode(rawParams, (address, address, DeploymentParameters));
     }
 }
-
