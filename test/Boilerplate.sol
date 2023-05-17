@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-import {Test, stdStorage, StdStorage} from "forge-std/Test.sol";
+import {Test, stdStorage, StdStorage, console} from "forge-std/Test.sol";
 import {Addresses} from "./Addresses.sol";
 
 contract Boilerplate is Test, Addresses {
@@ -15,6 +15,18 @@ contract Boilerplate is Test, Addresses {
     address public DEPLOYER;
 
     bool public activePrank;
+
+    function setUp() public {
+        makeAddr();
+        labelAddr();
+        deal(address(dai), USER1, 10_000e18);
+        // Add marginTradingFactory to approved proxies list
+        writeMappingSlot({target: address(dodoApproveProxy), signature: "_IS_ALLOWED_PROXY_(address)", addr: address(marginTradingFactory), value: 1 });
+    }
+
+    ////////////////////////////////////////////////////////////////////
+    //                           Utilities                            //
+    ////////////////////////////////////////////////////////////////////
 
     function suStart(address user) public {
         vm.startPrank(user);
@@ -32,10 +44,6 @@ contract Boilerplate is Test, Addresses {
         suStop();
     }
 
-    ////////////////////////////////////////////////////////////////////
-    //                           Utilities                            //
-    ////////////////////////////////////////////////////////////////////
-    
     function makeAddr() public {
         ATTACKER = address(0x1337);
         vm.label(ATTACKER, "ATTACKER");
@@ -56,6 +64,7 @@ contract Boilerplate is Test, Addresses {
         vm.label(address(usdc), "usdc");
         vm.label(address(dodoApprove), "dodoApprove");
         vm.label(address(dodoApproveProxy), "dodoApproveProxy");
+        vm.label(address(mockRouter), "mockRouter");
         vm.label(address(lendingPool), "lendingPool");
         vm.label(address(marginTradingFactory), "marginTradingFactory");
         vm.label(address(marginTradingTemplate), "marginTradingTemplate");
