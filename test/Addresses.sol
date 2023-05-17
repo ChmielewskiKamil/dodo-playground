@@ -12,6 +12,8 @@ import {MarginTradingFactory} from "dodo/marginTrading/MarginTradingFactory.sol"
 import {ILendingPool} from "dodo/aaveLib/Interfaces.sol";
 // === WETH ===
 import {IWETH} from "dodo/marginTrading/interfaces/IWETH.sol";
+// === IERC20 ===
+import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 // === Mainnet Addresses ===
 import {Environment} from "script/Environment.sol";
 
@@ -30,8 +32,8 @@ abstract contract Addresses {
     ILendingPool public immutable lendingPool = env.lendingPoolV2();
 
     //Main Assets in DODO
-    address public immutable dai = env.dai();
-    address public immutable usdc = env.usdc();
+    IERC20 public immutable dai = env.dai();
+    IERC20 public immutable usdc = env.usdc();
     IWETH public immutable weth = env.weth();
 
     //AAVE Interest Bearing Tokens
