@@ -23,7 +23,7 @@ contract Environment {
     address public immutable usdc;
     IWETH public immutable weth;
 
-    constructor (DeploymentParameters memory params) {
+    constructor(DeploymentParameters memory params) {
         dodoApprove = IDODOApprove(params.dodoApprove);
         dodoApproveProxy = IDODOApproveProxy(params.dodoApproveProxy);
         lendingPoolV2 = ILendingPool(params.lendingPoolV2);
